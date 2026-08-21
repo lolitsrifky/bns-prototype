@@ -1,0 +1,46 @@
+export type Locale = 'en' | 'id'
+
+export const loginCopy = {
+  en: {
+    brandTitle: 'BNS Predictive',
+    brandSubtitle: 'Operations Platform',
+    heroHeadline: 'Turn predictions into better operations.',
+    heroBody:
+      'A unified predictive intelligence platform for revenue, sales, fleet maintenance, scheduling, and field coverage.',
+    langEnglish: 'English',
+    langBahasa: 'Bahasa',
+    welcome: 'Welcome back',
+    welcomeSub: 'Sign in to BNS Predictive Operations.',
+    emailLabel: 'Employee ID / Email',
+    emailPlaceholder: 'name@bns.co.id',
+    passwordLabel: 'Password',
+    passwordPlaceholder: 'Enter your password',
+    rememberMe: 'Remember me',
+    forgotPassword: 'Forgot password?',
+    signIn: 'Sign In',
+    sso: 'Continue with Corporate SSO',
+    emailRequired: 'Employee ID / Email is required.',
+    passwordRequired: 'Password is required.',
+  },
+  id: {
+    brandTitle: 'BNS Predictive',
+    brandSubtitle: 'Operations Platform',
+    heroHeadline: 'Ubah prediksi menjadi operasi yang lebih baik.',
+    heroBody:
+      'Platform intelijen prediktif terpadu untuk pendapatan, penjualan, perawatan armada, penjadwalan, dan cakupan lapangan.',
+    langEnglish: 'English',
+    langBahasa: 'Bahasa',
+    welcome: 'Selamat datang kembali',
+    welcomeSub: 'Masuk ke BNS Predictive Operations.',
+    emailLabel: 'ID Karyawan / Email',
+    emailPlaceholder: 'nama@bns.co.id',
+    passwordLabel: 'Kata sandi',
+    passwordPlaceholder: 'Masukkan kata sandi Anda',
+    rememberMe: 'Ingat saya',
+    forgotPassword: 'Lupa kata sandi?',
+    signIn: 'Masuk',
+    sso: 'Lanjutkan dengan Corporate SSO',
+    emailRequired: 'ID Karyawan / Email wajib diisi.',
+    passwordRequired: 'Kata sandi wajib diisi.',
+  },
+} as const
