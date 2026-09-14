@@ -31,7 +31,7 @@
   border: 1px solid var(--bns-border);
   border-radius: 10px;
   overflow: hidden;
-  background: #fff;
+  background: var(--bns-surface);
   flex-wrap: wrap;
 }
 
@@ -52,7 +52,7 @@
 }
 
 .segmentBtn:hover {
-  background: #f8fafc;
+  background: var(--bns-surface-alt);
 }
 
 .segmentBtnActive {
@@ -68,8 +68,8 @@
 
 .card,
 .panel {
-  background: #fff;
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: var(--bns-surface);
+  border: 1px solid var(--bns-surface-border);
   border-radius: 14px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
 }
@@ -191,7 +191,7 @@
   gap: 1rem;
   padding: 0.9rem 1rem;
   border-radius: 10px;
-  background: #f8fafc;
+  background: var(--bns-surface-alt);
 }
 
 .timelineText {

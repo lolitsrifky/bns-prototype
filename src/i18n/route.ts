@@ -81,6 +81,23 @@ export const routeCopy = {
     stat2Caption: 'This month after dropping never-buyers',
     stat3Value: '28 / 37 · 76%',
     stat3Caption: 'Kept shops that bought in the last 12 months',
+
+    rawDataTitle: 'Raw Stop Data',
+    rawDataSub: 'Shop-level detail behind the summary above. Visible only in developer mode.',
+    tableCurrentRoute: 'Current Route',
+    tableOptimizedRoute: 'Optimized Route',
+    tableDropped: 'Dropped',
+    tableAdded: 'Added',
+    colNo: '#',
+    colShop: 'Shop',
+    colKecamatan: 'Kecamatan',
+    colStatus: 'Status',
+    colVisits: 'Visits',
+    colOrders: 'Orders 12M',
+    colKm: 'Km',
+    colScore: 'Score',
+    colSoldNext: 'Sold Next',
+    tableTruncatedNote: 'Showing a sample of rows — connect to the backend endpoint for the full list.',
   },
   id: {
     title: 'Route & Coverage Optimizer',
@@ -162,8 +179,110 @@ export const routeCopy = {
     stat2Caption: 'Bulan ini setelah menghapus non-pembeli',
     stat3Value: '28 / 37 · 76%',
     stat3Caption: 'Toko yang dipertahankan dan membeli dalam 12 bulan terakhir',
+
+    rawDataTitle: 'Data Mentah Titik Kunjungan',
+    rawDataSub: 'Detail per toko di balik ringkasan di atas. Hanya terlihat pada mode pengembang.',
+    tableCurrentRoute: 'Rute Saat Ini',
+    tableOptimizedRoute: 'Rute Teroptimasi',
+    tableDropped: 'Dihapus',
+    tableAdded: 'Ditambahkan',
+    colNo: '#',
+    colShop: 'Toko',
+    colKecamatan: 'Kecamatan',
+    colStatus: 'Status',
+    colVisits: 'Kunjungan',
+    colOrders: 'Order 12B',
+    colKm: 'Km',
+    colScore: 'Skor',
+    colSoldNext: 'Terjual Berikutnya',
+    tableTruncatedNote: 'Menampilkan sampel baris — hubungkan ke endpoint backend untuk daftar lengkap.',
   },
 } as const satisfies Record<Locale, Record<string, string>>
+
+export type RouteStopRow = {
+  shop: string
+  kecamatan: string
+  status: string
+  visits: number
+  orders12m: number
+  km: number
+  score: number
+  soldNext: number
+  // DUMMY data — ganti dengan lat/lng asli dari backend saat endpoint sudah tersedia.
+  lat: number
+  lng: number
+}
+
+// Titik tengah kira-kira tiap kecamatan di Kab. Polewali Mandar, Sulawesi Barat.
+// Sengaja disederhanakan untuk kebutuhan prototype — bukan sumber koordinat resmi.
+const kecamatanCenter: Record<string, { lat: number; lng: number }> = {
+  POLEWALI: { lat: -3.3853, lng: 119.3428 },
+  LUYO: { lat: -3.4453, lng: 119.2483 },
+  CAMPALAGIAN: { lat: -3.4693, lng: 119.2136 },
+  BINUANG: { lat: -3.5108, lng: 119.4256 },
+  TAPANGO: { lat: -3.3208, lng: 119.4056 },
+  WONOMULYO: { lat: -3.4419, lng: 119.2903 },
+  TINAMBUNG: { lat: -3.4936, lng: 119.1583 },
+  MATAKALI: { lat: -3.3583, lng: 119.3814 },
+}
+
+// Offset acak kecil (deterministik per shop id) supaya pin tidak numpuk di satu titik.
+function jitteredCoords(shop: string, kecamatan: string) {
+  const center = kecamatanCenter[kecamatan] ?? kecamatanCenter.POLEWALI
+  let hash = 0
+  for (let i = 0; i < shop.length; i++) hash = (hash * 31 + shop.charCodeAt(i)) % 10000
+  const jitterLat = ((hash % 100) / 100 - 0.5) * 0.03
+  const jitterLng = (((hash * 7) % 100) / 100 - 0.5) * 0.03
+  return { lat: center.lat + jitterLat, lng: center.lng + jitterLng }
+}
+
+function withCoords(rows: Omit<RouteStopRow, 'lat' | 'lng'>[]): RouteStopRow[] {
+  return rows.map((row) => ({ ...row, ...jitteredCoords(row.shop, row.kecamatan) }))
+}
+
+export const currentRouteRows: RouteStopRow[] = withCoords([
+  { shop: '76020028', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 20, orders12m: 12, km: 0.0, score: 0.42, soldNext: 1 },
+  { shop: '76020061', kecamatan: 'POLEWALI', status: 'Aktif', visits: 0, orders12m: 0, km: 0.0, score: 0.14, soldNext: 0 },
+  { shop: '76020051', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 3, orders12m: 3, km: 0.0, score: 0.26, soldNext: 1 },
+  { shop: '76020048', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 6, orders12m: 6, km: 0.0, score: 0.34, soldNext: 1 },
+  { shop: '76020037', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 20, orders12m: 12, km: 0.0, score: 0.42, soldNext: 1 },
+  { shop: '76020004', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 20, orders12m: 12, km: 0.0, score: 0.42, soldNext: 1 },
+  { shop: '76020011', kecamatan: 'LUYO', status: 'Tutup Sementara', visits: 20, orders12m: 0, km: 0.0, score: -0.43, soldNext: 0 },
+  { shop: '76020021', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 20, orders12m: 12, km: 0.0, score: 0.42, soldNext: 1 },
+  { shop: '76020047', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 17, orders12m: 0, km: 0.0, score: -0.43, soldNext: 0 },
+  { shop: '76020013', kecamatan: 'POLEWALI', status: 'Aktif', visits: 20, orders12m: 12, km: 0.0, score: 0.42, soldNext: 1 },
+  { shop: '76020026', kecamatan: 'CAMPALAGIAN', status: 'Aktif', visits: 19, orders12m: 11, km: 0.0, score: 0.41, soldNext: 1 },
+])
+
+export const optimizedRouteRows: RouteStopRow[] = withCoords([
+  { shop: '76020018', kecamatan: 'BINUANG', status: 'Tutup Sementara', visits: 20, orders12m: 12, km: 0.0, score: 0.42, soldNext: 1 },
+  { shop: '76020030', kecamatan: 'BINUANG', status: 'Aktif', visits: 20, orders12m: 12, km: 0.0, score: 0.42, soldNext: 1 },
+  { shop: '76020040', kecamatan: 'BINUANG', status: 'Aktif', visits: 20, orders12m: 12, km: 0.0, score: 0.42, soldNext: 1 },
+  { shop: '76020028', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 20, orders12m: 12, km: 0.0, score: 0.42, soldNext: 1 },
+  { shop: '76020061', kecamatan: 'POLEWALI', status: 'Aktif', visits: 0, orders12m: 0, km: 0.0, score: 0.14, soldNext: 0 },
+  { shop: '76020051', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 3, orders12m: 3, km: 0.0, score: 0.26, soldNext: 1 },
+  { shop: '76020048', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 6, orders12m: 6, km: 0.0, score: 0.34, soldNext: 1 },
+  { shop: '76020037', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 20, orders12m: 12, km: 0.0, score: 0.42, soldNext: 1 },
+  { shop: '76020004', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 20, orders12m: 12, km: 0.0, score: 0.42, soldNext: 1 },
+  { shop: '76020021', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 20, orders12m: 12, km: 0.0, score: 0.42, soldNext: 1 },
+])
+
+export const droppedRouteRows: RouteStopRow[] = withCoords([
+  { shop: '76020011', kecamatan: 'LUYO', status: 'Tutup Sementara', visits: 20, orders12m: 0, km: 0.0, score: -0.43, soldNext: 0 },
+  { shop: '76020047', kecamatan: 'POLEWALI', status: 'Tutup Sementara', visits: 17, orders12m: 0, km: 0.0, score: -0.43, soldNext: 0 },
+  { shop: '76020020', kecamatan: 'POLEWALI', status: 'Tutup Permanen', visits: 20, orders12m: 0, km: 0.0, score: -0.43, soldNext: 0 },
+  { shop: '76020038', kecamatan: 'TAPANGO', status: 'Alih Fungsi', visits: 20, orders12m: 0, km: 0.0, score: -0.43, soldNext: 0 },
+  { shop: '76020010', kecamatan: 'WONOMULYO', status: 'Alih Fungsi', visits: 20, orders12m: 0, km: 0.0, score: -0.43, soldNext: 0 },
+  { shop: '76020019', kecamatan: 'WONOMULYO', status: 'Tidak Jual Semen', visits: 19, orders12m: 0, km: 0.0, score: -0.43, soldNext: 0 },
+  { shop: '76020015', kecamatan: 'LUYO', status: 'Aktif', visits: 20, orders12m: 0, km: 0.0, score: -0.43, soldNext: 0 },
+  { shop: '76020033', kecamatan: 'TINAMBUNG', status: 'Tutup Sementara', visits: 20, orders12m: 0, km: 0.0, score: -0.43, soldNext: 0 },
+])
+
+export const addedRouteRows: RouteStopRow[] = withCoords([
+  { shop: '76020063', kecamatan: 'POLEWALI', status: 'Aktif', visits: 0, orders12m: 0, km: 0.0, score: 0.14, soldNext: 1 },
+  { shop: '76020062', kecamatan: 'POLEWALI', status: 'Aktif', visits: 0, orders12m: 0, km: 0.2, score: 0.14, soldNext: 1 },
+  { shop: '76020064', kecamatan: 'MATAKALI', status: 'Aktif', visits: 0, orders12m: 0, km: 1.0, score: 0.14, soldNext: 0 },
+])
 
 export const territoryMapPoints = [
   { x: 260, y: 130, tone: 'warning' as const },

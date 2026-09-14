@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { LocaleContext, useLocale } from './context/LocaleContext'
+import { ThemeContext, type ThemeMode } from './context/ThemeContext'
 import type { Locale } from './i18n/types'
 import AppShell from './layout/AppShell'
 import Login from './pages/Login/Login'
@@ -13,9 +14,19 @@ import RouteCoverage from './pages/RouteCoverage/RouteCoverage'
 import AiInsights from './pages/AiInsights/AiInsights'
 import ModelMonitoring from './pages/ModelMonitoring/ModelMonitoring'
 import Administration from './pages/Administration/Administration'
-import AlertCenter from './pages/AlertCenter/AlertCenter'
-import DataHealth from './pages/DataHealth/DataHealth'
-import UserExperience from './pages/UserExperience/UserExperience'
+import AlertCenter from './pages/alertCenter/AlertCenter'
+import DataHealth from './pages/dataHealth/DataHealth'
+import UserExperience from './pages/userExperience/UserExperience'
+import Settings from './pages/Settings/Settings'
+
+const THEME_STORAGE_KEY = 'bns-theme'
+
+function getInitialTheme(): ThemeMode {
+  if (typeof window === 'undefined') return 'light'
+  const stored = window.localStorage.getItem(THEME_STORAGE_KEY)
+  if (stored === 'light' || stored === 'low-light' || stored === 'dark') return stored
+  return 'light'
+}
 
 function LoginPage() {
   const navigate = useNavigate()
@@ -108,6 +119,14 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/settings"
+        element={
+          <AppShell>
+            <Settings />
+          </AppShell>
+        }
+      />
+      <Route
         path="/alerts"
         element={
           <AppShell>
@@ -139,12 +158,20 @@ function AppRoutes() {
 
 export default function App() {
   const [locale, setLocale] = useState<Locale>('en')
+  const [theme, setTheme] = useState<ThemeMode>(getInitialTheme)
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme)
+  }, [theme])
 
   return (
     <LocaleContext.Provider value={{ locale, setLocale }}>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+      <ThemeContext.Provider value={{ theme, setTheme }}>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </ThemeContext.Provider>
     </LocaleContext.Provider>
   )
 }

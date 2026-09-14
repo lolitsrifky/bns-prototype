@@ -54,7 +54,7 @@
   border: 1px solid var(--bns-border);
   border-radius: 10px;
   overflow: hidden;
-  background: #fff;
+  background: var(--bns-surface);
 }
 
 .segmentBtn {
@@ -74,7 +74,7 @@
 }
 
 .segmentBtn:hover {
-  background: #f8fafc;
+  background: var(--bns-surface-alt);
 }
 
 .segmentBtnActive {
@@ -90,8 +90,8 @@
 
 .kpiCard,
 .panel {
-  background: #fff;
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: var(--bns-surface);
+  border: 1px solid var(--bns-surface-border);
   border-radius: 14px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
 }
@@ -226,7 +226,7 @@
   padding: 0.6rem 0.5rem;
   color: #64748b;
   font-weight: 600;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--bns-surface-alt-2);
   border-right: 1px solid #f1f5f9;
   vertical-align: top;
 }
@@ -234,7 +234,7 @@
 .gridCell {
   height: 4.4rem;
   padding: 0.4rem;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--bns-surface-alt-2);
   border-right: 1px solid #f1f5f9;
   vertical-align: top;
 }
@@ -369,7 +369,7 @@
 
 .conflictList li {
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--bns-surface-alt-2);
 }
 
 .conflictList li:last-child {

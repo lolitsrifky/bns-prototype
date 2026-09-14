@@ -1,6 +1,14 @@
 import { useState } from 'react'
-import { routeCopy } from '../../i18n/route'
+import {
+  routeCopy,
+  currentRouteRows,
+  optimizedRouteRows,
+  droppedRouteRows,
+  addedRouteRows,
+  type RouteStopRow,
+} from '../../i18n/route'
 import { useLocale } from '../../context/LocaleContext'
+import MapView, { type MapStop } from './MapView'
 import styles from './RouteCoverage.module.css'
 
 type RouteTab = 'original' | 'optimized' | 'side'
@@ -85,10 +93,65 @@ function DonutChart({ segments, size = 168 }: { segments: DonutSegment[]; size?:
   )
 }
 
-function MapPlaceholder({ label }: { label: string }) {
+type RouteTableColumns = {
+  no: string
+  shop: string
+  kecamatan: string
+  status: string
+  visits: string
+  orders: string
+  km: string
+  score: string
+  soldNext: string
+}
+
+function RouteTable({
+  title,
+  rows,
+  columns,
+}: {
+  title: string
+  rows: RouteStopRow[]
+  columns: RouteTableColumns
+}) {
   return (
-    <div className={styles.mapPlaceholder}>
-      <span>{label}</span>
+    <div className={styles.tableCard}>
+      <div className={styles.tableCardHeader}>
+        <h3 className={styles.tableCardTitle}>{title}</h3>
+        <span className={styles.tableCardCount}>{rows.length}</span>
+      </div>
+      <div className={styles.tableScroll}>
+        <table className={styles.dataTable}>
+          <thead>
+            <tr>
+              <th>{columns.no}</th>
+              <th>{columns.shop}</th>
+              <th>{columns.kecamatan}</th>
+              <th>{columns.status}</th>
+              <th>{columns.visits}</th>
+              <th>{columns.orders}</th>
+              <th>{columns.km}</th>
+              <th>{columns.score}</th>
+              <th>{columns.soldNext}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={`${row.shop}-${index}`}>
+                <td>{index + 1}</td>
+                <td>{row.shop}</td>
+                <td>{row.kecamatan}</td>
+                <td>{row.status}</td>
+                <td>{row.visits}</td>
+                <td>{row.orders12m}</td>
+                <td>{row.km.toFixed(1)}</td>
+                <td className={row.score >= 0 ? styles.scorePositive : styles.scoreNegative}>{row.score.toFixed(2)}</td>
+                <td>{row.soldNext}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
@@ -103,6 +166,19 @@ export default function RouteCoverage() {
   const showOriginal = tab !== 'optimized'
   const showOptimized = tab !== 'original'
 
+  const droppedShopIds = new Set(droppedRouteRows.map((row) => row.shop))
+  const addedShopIds = new Set(addedRouteRows.map((row) => row.shop))
+
+  const originalStops: MapStop[] = currentRouteRows.map((row) => ({
+    ...row,
+    tone: droppedShopIds.has(row.shop) ? 'dropped' : 'kept',
+  }))
+
+  const optimizedStops: MapStop[] = optimizedRouteRows.map((row) => ({
+    ...row,
+    tone: addedShopIds.has(row.shop) ? 'added' : 'kept',
+  }))
+
   const legendItems = [
     { key: 'kept', label: t.legendKept, swatch: <span className={`${styles.legendDot} ${styles.dotGreen}`} /> },
     { key: 'dropped', label: t.legendDropped, swatch: <span className={`${styles.legendDot} ${styles.dotRed}`} /> },
@@ -110,6 +186,18 @@ export default function RouteCoverage() {
     { key: 'originalPath', label: t.legendOriginalPath, swatch: <span className={`${styles.legendLine} ${styles.lineDashed}`} /> },
     { key: 'optimizedPath', label: t.legendOptimizedPath, swatch: <span className={`${styles.legendLine} ${styles.lineSolid}`} /> },
   ]
+
+  const tableColumns: RouteTableColumns = {
+    no: t.colNo,
+    shop: t.colShop,
+    kecamatan: t.colKecamatan,
+    status: t.colStatus,
+    visits: t.colVisits,
+    orders: t.colOrders,
+    km: t.colKm,
+    score: t.colScore,
+    soldNext: t.colSoldNext,
+  }
 
   const donutLegendItems = [
     { key: 'bought', label: t.legendBought, tone: styles.dotGreen },
@@ -220,14 +308,14 @@ export default function RouteCoverage() {
             <div className={styles.mapCol}>
               <h3 className={styles.mapColTitle}>{t.originalRouteTitle}</h3>
               <p className={styles.mapColStats}>{t.originalRouteStats}</p>
-              <MapPlaceholder label={t.mapPlaceholderText} />
+              <MapView stops={originalStops} pathStyle="dashed" emptyLabel={t.mapPlaceholderText} />
             </div>
           )}
           {showOptimized && (
             <div className={styles.mapCol}>
               <h3 className={styles.mapColTitle}>{t.optimizedRouteTitle}</h3>
               <p className={styles.mapColStats}>{t.optimizedRouteStats}</p>
-              <MapPlaceholder label={t.mapPlaceholderText} />
+              <MapView stops={optimizedStops} pathStyle="solid" emptyLabel={t.mapPlaceholderText} />
             </div>
           )}
         </div>
@@ -279,6 +367,35 @@ export default function RouteCoverage() {
           </div>
         </div>
       </section>
+
+      {devMode && (
+        <section className={styles.panel}>
+          <div className={styles.panelHeader}>
+            <h2 className={styles.panelTitle}>{t.rawDataTitle}</h2>
+            <p className={styles.panelSub}>{t.rawDataSub}</p>
+          </div>
+
+          <div className={styles.tableGrid}>
+            <RouteTable
+              title={`${t.tableCurrentRoute} (45)`}
+              rows={currentRouteRows}
+              columns={tableColumns}
+            />
+            <RouteTable
+              title={`${t.tableOptimizedRoute} (40)`}
+              rows={optimizedRouteRows}
+              columns={tableColumns}
+            />
+          </div>
+
+          <div className={styles.tableGrid}>
+            <RouteTable title={`${t.tableDropped} (8)`} rows={droppedRouteRows} columns={tableColumns} />
+            <RouteTable title={`${t.tableAdded} (3)`} rows={addedRouteRows} columns={tableColumns} />
+          </div>
+
+          <p className={styles.devModeFootnote}>{t.tableTruncatedNote}</p>
+        </section>
+      )}
     </div>
   )
 }

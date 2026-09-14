@@ -26,6 +26,8 @@ const icons = {
   insights: 'M12 3v3M12 18v3M4.2 6.2l2.1 2.1M17.7 15.7l2.1 2.1M3 12h3M18 12h3M4.2 17.8l2.1-2.1M17.7 8.3l2.1-2.1M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0Z',
   monitoring: 'M4 19h16M6 16V9m4 7V5m4 11v-6m4 6v-3',
   admin: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7.5 8a7.5 7.5 0 0 1 15 0',
+  settings:
+    'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8-3a6.6 6.6 0 0 0-.13-1.33l1.62-1.27-1.5-2.6-1.92.63a6.7 6.7 0 0 0-2.32-1.34L15.4 3H12.6l-.35 2.09a6.7 6.7 0 0 0-2.32 1.34l-1.92-.63-1.5 2.6L8.13 9.67C8.05 10.1 8 10.55 8 11s.05.9.13 1.33l-1.62 1.27 1.5 2.6 1.92-.63c.68.57 1.47 1.02 2.32 1.34l.35 2.09h2.8l.35-2.09a6.7 6.7 0 0 0 2.32-1.34l1.92.63 1.5-2.6-1.62-1.27c.08-.43.13-.88.13-1.33Z',
   search: 'M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm10 2-4.3-4.3',
   help: 'M12 17h.01M9.1 9a3 3 0 1 1 4.7 2.5c-.8.6-1.8 1.2-1.8 2.5M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z',
   bell: 'M6 9a6 6 0 1 1 12 0c0 7 3 7 3 7H3s3 0 3-7Zm4 11a2 2 0 0 0 4 0',
@@ -61,6 +63,7 @@ export default function AppShell({ children }: AppShellProps) {
         { to: '/insights', label: t.aiInsights, icon: icons.insights },
         { to: '/monitoring', label: t.modelMonitoring, icon: icons.monitoring },
         { to: '/admin', label: t.administration, icon: icons.admin },
+        { to: '/settings', label: t.settings, icon: icons.settings },
       ],
     },
   ]

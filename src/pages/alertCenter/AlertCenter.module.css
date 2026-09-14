@@ -40,7 +40,7 @@
   font-weight: 700;
   cursor: pointer;
   border: 1px solid transparent;
-  background: #fff;
+  background: var(--bns-surface);
 }
 
 .filterPillActive {
@@ -60,8 +60,8 @@
 }
 
 .panel {
-  background: #fff;
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: var(--bns-surface);
+  border: 1px solid var(--bns-surface-border);
   border-radius: 14px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
   padding: 1.25rem 1.3rem 1.3rem;
@@ -86,7 +86,7 @@
   align-items: center;
   gap: 1rem;
   padding: 1.1rem 0;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--bns-surface-alt-2);
 }
 
 .alertRow:last-child {
@@ -226,7 +226,7 @@
   padding: 0 1rem;
   border-radius: 10px;
   border: 1px solid var(--bns-border);
-  background: #fff;
+  background: var(--bns-surface);
   color: #334155;
   font-weight: 600;
   font-size: 0.875rem;
@@ -234,7 +234,7 @@
 }
 
 .secondaryBtn:hover {
-  background: #f8fafc;
+  background: var(--bns-surface-alt);
 }
 
 @media (max-width: 1100px) {
