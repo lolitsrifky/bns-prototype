@@ -1,0 +1,212 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.35rem, 2vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--bns-navy);
+}
+
+.subtitle {
+  margin: 0.35rem 0 0;
+  color: var(--bns-muted);
+  font-size: 0.9rem;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.card,
+.panel {
+  background: #fff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.card {
+  padding: 1.25rem 1.3rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--bns-navy);
+}
+
+.cardSubtitle {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  color: var(--bns-muted);
+}
+
+.cardBody {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.55;
+  flex: 1 0 auto;
+}
+
+.pillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.statusPill {
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.pillBlue {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.pillGreen {
+  background: #f0fdf4;
+  color: #059669;
+}
+
+.pillRed {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.pillYellow {
+  background: #fefce8;
+  color: #b45309;
+}
+
+.primaryBtn {
+  height: 2.4rem;
+  padding: 0 1.1rem;
+  border-radius: 10px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  margin-top: auto;
+}
+
+.primaryBtn:hover {
+  background: #1d4ed8;
+}
+
+.panel {
+  padding: 1.15rem 1.2rem 1.25rem;
+}
+
+.panelHeader {
+  margin-bottom: 0.5rem;
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--bns-navy);
+}
+
+.panelSub {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: var(--bns-muted);
+}
+
+.configList {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+}
+
+.configRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0.25rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.configRow:last-child {
+  border-bottom: 0;
+}
+
+.configLabel {
+  flex: 0 0 auto;
+  width: 15rem;
+  font-weight: 700;
+  color: var(--bns-navy);
+  font-size: 0.9rem;
+}
+
+.configValue {
+  flex: 1 1 auto;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1200px) {
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .pageHeader {
+    flex-direction: column;
+  }
+
+  .configRow {
+    flex-wrap: wrap;
+  }
+
+  .configLabel {
+    width: 100%;
+  }
+}

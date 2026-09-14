@@ -1,0 +1,95 @@
+import type { Locale } from './types'
+
+export const scheduleCopy = {
+  en: {
+    title: 'AI Schedule Organizer',
+    subtitle: 'Optimize trucks, drivers, deliveries, and maintenance activities.',
+    generateSchedule: 'Generate Optimal Schedule',
+    viewMonth: 'Month',
+    viewWeek: 'Week',
+    viewDay: 'Day',
+    scheduledDeliveries: 'Scheduled Deliveries',
+    scheduledDeliveriesValue: '84',
+    scheduledDeliveriesSub: 'Today',
+    resourceConflicts: 'Resource Conflicts',
+    resourceConflictsValue: '4',
+    resourceConflictsSub: 'Require review',
+    scheduleEfficiency: 'Schedule Efficiency',
+    scheduleEfficiencyValue: '91%',
+    scheduleEfficiencySub: '+6% optimized',
+    operationalScheduleTitle: 'Operational Schedule',
+    operationalScheduleSub: 'Monday–Friday',
+    colTime: 'Time',
+    dayMon: 'Mon',
+    dayTue: 'Tue',
+    dayWed: 'Wed',
+    dayThu: 'Thu',
+    dayFri: 'Fri',
+    aiRecommendationTitle: 'AI Recommendation',
+    schedulingConflict: 'Scheduling Conflict',
+    attentionBadge: 'Attention',
+    schedulingConflictText: 'Truck 08 has elevated failure risk and should be inspected before delivery.',
+    recommendationText: 'Move delivery to Truck 12 and reschedule maintenance to 14:00.',
+    applyRecommendation: 'Apply Recommendation',
+    detectedConflictsTitle: 'Detected Conflicts',
+    conflictResource: 'Resource conflict',
+    conflictMaintenance: 'Maintenance conflict',
+    conflictDriverHours: 'Driver working-hour conflict',
+    conflictDeliveryPriority: 'Delivery priority conflict',
+    cellConflict: 'Conflict',
+  },
+  id: {
+    title: 'AI Schedule Organizer',
+    subtitle: 'Optimalkan truk, pengemudi, pengiriman, dan aktivitas pemeliharaan.',
+    generateSchedule: 'Buat Jadwal Optimal',
+    viewMonth: 'Bulan',
+    viewWeek: 'Minggu',
+    viewDay: 'Hari',
+    scheduledDeliveries: 'Pengiriman Terjadwal',
+    scheduledDeliveriesValue: '84',
+    scheduledDeliveriesSub: 'Hari ini',
+    resourceConflicts: 'Konflik Sumber Daya',
+    resourceConflictsValue: '4',
+    resourceConflictsSub: 'Perlu ditinjau',
+    scheduleEfficiency: 'Efisiensi Jadwal',
+    scheduleEfficiencyValue: '91%',
+    scheduleEfficiencySub: '+6% teroptimasi',
+    operationalScheduleTitle: 'Jadwal Operasional',
+    operationalScheduleSub: 'Senin–Jumat',
+    colTime: 'Waktu',
+    dayMon: 'Sen',
+    dayTue: 'Sel',
+    dayWed: 'Rab',
+    dayThu: 'Kam',
+    dayFri: 'Jum',
+    aiRecommendationTitle: 'Rekomendasi AI',
+    schedulingConflict: 'Konflik Penjadwalan',
+    attentionBadge: 'Perhatian',
+    schedulingConflictText: 'Truk 08 memiliki risiko kegagalan tinggi dan perlu diperiksa sebelum pengiriman.',
+    recommendationText: 'Pindahkan pengiriman ke Truk 12 dan jadwalkan ulang pemeliharaan ke pukul 14:00.',
+    applyRecommendation: 'Terapkan Rekomendasi',
+    detectedConflictsTitle: 'Konflik Terdeteksi',
+    conflictResource: 'Konflik sumber daya',
+    conflictMaintenance: 'Konflik pemeliharaan',
+    conflictDriverHours: 'Konflik jam kerja pengemudi',
+    conflictDeliveryPriority: 'Konflik prioritas pengiriman',
+    cellConflict: 'Konflik',
+  },
+} as const satisfies Record<Locale, Record<string, string>>
+
+export type ScheduleCellTone = 'delivery' | 'maintenance' | 'conflict' | 'deliveryAlt'
+
+export type ScheduleCell = {
+  day: 'mon' | 'tue' | 'wed' | 'thu' | 'fri'
+  time: '08:00' | '10:00' | '12:00' | '14:00'
+  label: string
+  tone: ScheduleCellTone
+}
+
+export const scheduleCells: ScheduleCell[] = [
+  { day: 'mon', time: '08:00', label: 'Truck 21 → Makassar', tone: 'delivery' },
+  { day: 'wed', time: '08:00', label: 'Truck 14 → Parepare', tone: 'delivery' },
+  { day: 'mon', time: '10:00', label: 'Truck 08 → Maintenance', tone: 'maintenance' },
+  { day: 'wed', time: '10:00', label: '', tone: 'conflict' },
+  { day: 'fri', time: '12:00', label: 'Truck 07 → Palopo', tone: 'deliveryAlt' },
+]

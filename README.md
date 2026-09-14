@@ -5,6 +5,7 @@ React + Vite + TypeScript prototype for the BNS Predictive Operations Platform.
 ## Current scope
 
 - Login page aligned to the Figma design (split hero + form, English / Bahasa)
+- Dashboard preview (sidebar, KPIs, revenue chart, attention list, regional table)
 
 ## Scripts
 

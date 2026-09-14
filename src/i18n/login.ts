@@ -1,4 +1,4 @@
-export type Locale = 'en' | 'id'
+import type { Locale } from './types'
 
 export const loginCopy = {
   en: {
@@ -43,4 +43,4 @@ export const loginCopy = {
     emailRequired: 'ID Karyawan / Email wajib diisi.',
     passwordRequired: 'Kata sandi wajib diisi.',
   },
-} as const
+} as const satisfies Record<Locale, Record<string, string>>

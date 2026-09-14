@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { loginCopy } from '../../i18n/login'
-import type { Locale } from '../../i18n/login'
+import type { Locale } from '../../i18n/types'
 import styles from './Login.module.css'
 
-export default function Login() {
+type LoginProps = {
+  onSuccess: (locale: Locale) => void
+}
+
+export default function Login({ onSuccess }: LoginProps) {
   const [locale, setLocale] = useState<Locale>('en')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -24,12 +28,11 @@ export default function Login() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!validate()) return
-    // Prototype: auth wiring comes later with the backend / SSO flow.
-    console.info('BNS sign-in attempt', { email: email.trim(), remember, locale })
+    onSuccess(locale)
   }
 
   function handleSso() {
-    console.info('BNS corporate SSO requested', { locale })
+    onSuccess(locale)
   }
 
   return (
